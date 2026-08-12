@@ -5,6 +5,7 @@ import type {
 } from "@/models/paciente";
 import { ErroValidacaoPaciente } from "@/errors/erro-aplicacao";
 import { validarNovoPaciente } from "@/validators/paciente-validator";
+import { classificarPrioridade } from "@/services/triagem-service";
 
 
 // array to store patients
@@ -22,11 +23,18 @@ export function cadastrarPaciente(
     throw new ErroValidacaoPaciente(erros);
   }
 
+  const prioridade = classificarPrioridade({
+    idade: dados.idade,
+    sintomas: dados.sintomas,
+  });
+
   const paciente: Paciente = {
     ...dados,
     id: `PAC-${String(proximoId).padStart(3, "0")}`,
     dataChegada: new Date(),
+    prioridade,
     status: "aguardando",
+
   };
 
   pacientes.push(paciente);

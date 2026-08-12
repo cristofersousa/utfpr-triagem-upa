@@ -25,8 +25,8 @@ export type Prioridade =
     prioridade: Prioridade;
     status: StatusAtendimento;
 }
-// type para criar um novo paciente, omitindo os campos id, dataChegada e status
-export type NovoPaciente = Omit<Paciente, "id" | "dataChegada" | "status">;
+// type para criar um novo paciente, omitindo os campos id, dataChegada, status e prioridade
+export type NovoPaciente = Omit<Paciente, "id" | "dataChegada" | "status" | "prioridade"> ;
 
 // type para atualizar um paciente, permitindo apenas os campos nome, idade, telefone, sintomas e prioridade
 export type AtualizacaoPaciente = Partial<
@@ -35,3 +35,13 @@ export type AtualizacaoPaciente = Partial<
       "nome" | "idade" | "telefone" | "sintomas" | "prioridade"
     >
 >;
+
+// interface para os dados de triagem do paciente
+export interface DadosTriagem {
+  sintomas: string[];
+  idade: number;
+  nivelDor?: number;
+  inconsciente?: boolean;
+  dificuldadeRespirar?: boolean;
+  sangramentoIntenso?: boolean;
+}

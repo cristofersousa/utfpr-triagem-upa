@@ -36,8 +36,7 @@ const maria = cadastrarPaciente({
   idade: 42,
   cpf: "123.456.789-00",
   telefone: "(47) 99999-9999",
-  sintomas: ["febre", "dor de cabeça", "náusea"],
-  prioridade: "amarelo",
+  sintomas: ["dor de cabeça"],
 });
 
 const joao = cadastrarPaciente({
@@ -45,7 +44,6 @@ const joao = cadastrarPaciente({
   idade: 68,
   cpf: "987.654.321-00",
   sintomas: ["falta de ar", "dor no peito"],
-  prioridade: "vermelho",
 });
 
 const pacienteAtualizado = atualizarPaciente(maria.id, {

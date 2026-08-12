@@ -40,6 +40,15 @@ export function validarSintomas(sintomas: string[]): boolean {
   );
 }
 
+// validate that the pain level is an integer between 0 and 10
+export function validarNivelDor(nivelDor: number): boolean {
+  return (
+    Number.isInteger(nivelDor) &&
+    nivelDor >= 0 &&
+    nivelDor <= 10
+  );
+}
+
 // validate the data of a new patient and return an array of validation errors
 export function validarNovoPaciente(
   dados: NovoPaciente,
