@@ -29,6 +29,7 @@ src/
 ├── docs/
 │   ├── paciente.md
 │   └── erros-sistema.md
+│   └── triagem.md
 ├── api/
 ├── cli/
 ├── config/
@@ -51,6 +52,7 @@ Para conhecer a modelagem e as funcionalidades relacionadas aos sistema, consult
 
 - [Guia do Paciente](docs/paciente.md)
 - [Guia de Erros da Aplicação](docs/erros-sistema.md)
+- [Guia do Serviço de Triagem](docs/triagem.md)
 
 
 ## Como executar
