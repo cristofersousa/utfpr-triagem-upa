@@ -3,6 +3,9 @@ import type {
   NovoPaciente,
   Paciente,
 } from "@/models/paciente";
+import { ErroValidacaoPaciente } from "@/errors/erro-aplicacao";
+import { validarNovoPaciente } from "@/validators/paciente-validator";
+
 
 // array to store patients
 const pacientes: Paciente[] = [];
@@ -13,6 +16,12 @@ let proximoId = 1;
 export function cadastrarPaciente(
   dados: NovoPaciente,
 ): Paciente {
+    const erros = validarNovoPaciente(dados);
+
+  if (erros.length > 0) {
+    throw new ErroValidacaoPaciente(erros);
+  }
+
   const paciente: Paciente = {
     ...dados,
     id: `PAC-${String(proximoId).padStart(3, "0")}`,

@@ -6,12 +6,15 @@ import {
   listarPacientes,
 } from "@/services/paciente-service";
 
+import {
+  ErroAplicacao,
+  ErroValidacaoPaciente,
+} from "@/errors/erro-aplicacao";
+
 const sistemaAtivo: boolean = true;
 const unidade: string = "UPA Central";
 const quantidadePacientes: number = 0;
 const atendimentoDisponivel: boolean = true;
-
-
 
 console.log("====================================");
 console.log(` ${nomeSistema}` );
