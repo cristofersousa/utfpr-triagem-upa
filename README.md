@@ -27,22 +27,31 @@ O sistema será executado pelo terminal utilizando Node.js e desenvolvido de for
 ```text
 src/
 ├── docs/
-│   └── paciente.md
+│   ├── paciente.md
+│   └── erros-sistema.md
 ├── api/
 ├── cli/
 ├── config/
+├── errors/
+│   └── codigos-erro.ts
+│   └── erro-aplicacao.ts
 ├── models/
 │   └── paciente.ts
 ├── services/
 │   └── paciente-service.ts
 ├── validators/
+│   └── paciente-validator.ts
 └── index.ts
 tests/
 ```
 
-## Modelagem
+## Documentação
 
-Para conhecer a modelagem e as funcionalidades relacionadas aos pacientes, consulte o [Guia do Paciente](docs/paciente.md).
+Para conhecer a modelagem e as funcionalidades relacionadas aos sistema, consulte os guias abaixo:
+
+- [Guia do Paciente](docs/paciente.md)
+- [Guia de Erros da Aplicação](docs/erros-sistema.md)
+
 
 ## Como executar
 
