@@ -7,7 +7,7 @@ import type {
 import { ErroValidacaoPaciente } from "@/errors/erro-aplicacao";
 import { validarNovoPaciente } from "@/validators/paciente-validator";
 import { classificarPrioridade } from "@/services/triagem-service";
-
+import type { PacienteApi } from "@/models/paciente-api";
 
 // array to store patients
 const pacientes: Paciente[] = [];
@@ -86,4 +86,19 @@ export function alterarStatusAtendimento(
   paciente.status = novoStatus;
 
   return paciente;
+}
+
+// function for change Patient API[] to Patient[]
+export function importarPacientes(
+  dadosExternos: PacienteApi[],
+): Paciente[] {
+  return dadosExternos.map((dados) =>
+    cadastrarPaciente({
+      nome: dados.nome,
+      idade: dados.idade,
+      cpf: dados.cpf,
+      telefone: dados.telefone,
+      sintomas: dados.sintomas,
+    }),
+  );
 }
