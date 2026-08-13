@@ -41,6 +41,16 @@ Ele contém funções para:
 - localizar um paciente pelo identificador;
 - atualizar informações de um paciente.
 
+## Regra de unicidade do CPF
+
+O CPF é utilizado como identificador documental e não pode estar relacionado a mais de um paciente.
+
+Antes de concluir o cadastro, o serviço normaliza o CPF e verifica se já existe outro registro com o mesmo documento.
+
+```ts
+buscarPacientePorCpf(cpf: string): Paciente | undefined
+```
+
 ## Níveis de prioridade
 
 O tipo `Prioridade` define os valores permitidos para a classificação de risco:
