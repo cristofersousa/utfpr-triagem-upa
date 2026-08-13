@@ -33,6 +33,7 @@ src/
 ├── api/
 ├── cli/
 ├── config/
+│   └── prioridades.ts
 ├── errors/
 │   └── codigos-erro.ts
 │   └── erro-aplicacao.ts
