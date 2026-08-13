@@ -45,3 +45,16 @@ export interface DadosTriagem {
   dificuldadeRespirar?: boolean;
   sangramentoIntenso?: boolean;
 }
+
+/**
+ * {
+  nivelDor?: number;
+  inconsciente?: boolean;
+  dificuldadeRespirar?: boolean;
+  sangramentoIntenso?: boolean;
+}
+ */
+export type InformacoesTriagem = Omit<
+  DadosTriagem,
+  "idade" | "sintomas"
+>;
