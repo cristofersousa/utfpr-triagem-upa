@@ -33,6 +33,7 @@ src/
 ├── api/
 ├── cli/
 ├── config/
+│   └── prioridades.ts
 ├── errors/
 │   └── codigos-erro.ts
 │   └── erro-aplicacao.ts
@@ -53,6 +54,7 @@ Para conhecer a modelagem e as funcionalidades relacionadas aos sistema, consult
 - [Guia do Paciente](docs/paciente.md)
 - [Guia de Erros da Aplicação](docs/erros-sistema.md)
 - [Guia do Serviço de Triagem](docs/triagem.md)
+- [Guia de Fila de Atendimento](docs/fila-atendimento.md)
 
 
 ## Como executar

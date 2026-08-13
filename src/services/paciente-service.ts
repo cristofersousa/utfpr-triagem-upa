@@ -2,6 +2,7 @@ import type {
   AtualizacaoPaciente,
   NovoPaciente,
   Paciente,
+  StatusAtendimento
 } from "@/models/paciente";
 import { ErroValidacaoPaciente } from "@/errors/erro-aplicacao";
 import { validarNovoPaciente } from "@/validators/paciente-validator";
@@ -67,6 +68,22 @@ export function atualizarPaciente(
   }
 
   Object.assign(paciente, alteracoes);
+
+  return paciente;
+}
+
+// function to change the status of a patient's attendance
+export function alterarStatusAtendimento(
+  id: string,
+  novoStatus: StatusAtendimento,
+): Paciente | undefined {
+  const paciente = buscarPacientePorId(id);
+
+  if (!paciente) {
+    return undefined;
+  }
+
+  paciente.status = novoStatus;
 
   return paciente;
 }
