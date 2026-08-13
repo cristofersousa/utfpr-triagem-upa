@@ -4,7 +4,9 @@ import type { Paciente } from "@/models/paciente";
 import {
   alterarStatusAtendimento,
   listarPacientes,
+  buscarPacientePorId
 } from "@/services/paciente-service";
+
 
 export function listarFilaAtendimento(): Paciente[] {
   const pacientesAguardando = listarPacientes().filter(
@@ -44,5 +46,17 @@ export function chamarProximoPaciente(): Paciente | undefined {
 export function finalizarAtendimento(
   id: string,
 ): Paciente | undefined {
-  return alterarStatusAtendimento(id, "atendido");
+  const paciente = buscarPacientePorId(id);
+
+  if (
+    !paciente ||
+    paciente.status !== "em-atendimento"
+  ) {
+    return undefined;
+  }
+
+  return alterarStatusAtendimento(
+    paciente.id,
+    "atendido",
+  );
 }
