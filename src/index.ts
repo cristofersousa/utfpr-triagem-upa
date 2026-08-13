@@ -1,21 +1,14 @@
-import { nomeSistema, versaoSistema } from "@/config/sistema";
-import type { Paciente } from "@/models/paciente";
+import { carregarPacientesApi } from "@/api/paciente-api";
+
 import {
-  atualizarPaciente,
-  cadastrarPaciente,
-  listarPacientes,
-} from "@/services/paciente-service";
+  nomeSistema,
+  versaoSistema,
+} from "@/config/sistema";
 
 import {
   ErroAplicacao,
   ErroValidacaoPaciente,
 } from "@/errors/erro-aplicacao";
-
-import {
-  chamarProximoPaciente,
-  finalizarAtendimento,
-  listarFilaAtendimento,
-} from "@/services/fila-service";
 
 import {
   buscarPacientePorNome,
@@ -24,145 +17,270 @@ import {
   listarPacientesPorPrioridade,
 } from "@/services/consulta-service";
 
+import { gerarEstatisticas } from "@/services/estatistica-service";
+
 import {
-  calcularIdadeMedia,
-  gerarEstatisticas,
-} from "@/services/estatistica-service";
+  chamarProximoPaciente,
+  finalizarAtendimento,
+  listarFilaAtendimento,
+} from "@/services/fila-service";
 
+import {
+  atualizarPaciente,
+  cadastrarPaciente,
+  importarPacientes,
+  listarPacientes,
+} from "@/services/paciente-service";
 
-const sistemaAtivo: boolean = true;
-const unidade: string = "UPA Central";
-const quantidadePacientes: number = 0;
-const atendimentoDisponivel: boolean = true;
-
-console.log("====================================");
-console.log(` ${nomeSistema}` );
-console.log(` Versão: ${versaoSistema}`);
-console.log("====================================");
-
-if (sistemaAtivo) {
+function exibirCabecalho(): void {
+  console.log("====================================");
+  console.log(` ${nomeSistema}`);
+  console.log(` Versão: ${versaoSistema}`);
+  console.log("====================================");
   console.log("Sistema iniciado com sucesso!");
 }
+
+function cadastrarPacientesExemplo(): void {
+  const maria = cadastrarPaciente({
+    nome: "Maria da Silva",
+    idade: 42,
+    cpf: "123.456.789-00",
+    telefone: "(47) 99999-9999",
+    sintomas: ["dor de cabeça"],
+  });
+
+  cadastrarPaciente({
+    nome: "João dos Santos",
+    idade: 68,
+    cpf: "987.654.321-00",
+    sintomas: ["falta de ar", "dor no peito"],
+  });
+
+  atualizarPaciente(maria.id, {
+    prioridade: "laranja",
+    sintomas: [...maria.sintomas, "tontura"],
+  });
+
+  console.log("\nPacientes de exemplo cadastrados.");
+}
+
+async function carregarDadosExternos(): Promise<void> {
+  console.log("\nCarregando pacientes da API simulada...");
+
+  const dadosExternos = await carregarPacientesApi();
+  const pacientesImportados =
+    importarPacientes(dadosExternos);
+
   console.log(
-  `A ${unidade} possui ${quantidadePacientes} pacientes, aguardando atendimento.`,
+    `${pacientesImportados.length} pacientes importados com sucesso.`,
   );
+}
 
-const statusAtendimento = atendimentoDisponivel ? "Atendimento disponível" : "Atendimento indisponível";
-console.log(`Status do atendimento: ${statusAtendimento}`);
+function exibirPacientes(): void {
+  console.log("\n====================================");
+  console.log(" Pacientes cadastrados");
+  console.log("====================================");
 
-const maria = cadastrarPaciente({
-  nome: "Maria da Silva",
-  idade: 42,
-  cpf: "123.456.789-00",
-  telefone: "(47) 99999-9999",
-  sintomas: ["dor de cabeça"],
-});
-
-const joao = cadastrarPaciente({
-  nome: "João dos Santos",
-  idade: 68,
-  cpf: "987.654.321-00",
-  sintomas: ["falta de ar", "dor no peito"],
-});
-
-const pacienteAtualizado = atualizarPaciente(maria.id, {
-  prioridade: "laranja",
-  sintomas: [...maria.sintomas, "tontura"],
-});
-
-console.log("\nPacientes cadastrados:");
-
-console.log("\nFila de atendimento:");
-
-listarFilaAtendimento().forEach((paciente, indice) => {
-  console.log(
-    `${indice + 1}. ${paciente.nome} — ${paciente.prioridade}`,
-  );
-});
-
-listarPacientes().forEach((paciente) => {
-  console.log(`
+  listarPacientes().forEach((paciente) => {
+    console.log(`
 ID: ${paciente.id}
 Nome: ${paciente.nome}
 Idade: ${paciente.idade} anos
+CPF: ${paciente.cpf}
+Telefone: ${paciente.telefone ?? "Não informado"}
 Sintomas: ${paciente.sintomas.join(", ")}
 Prioridade: ${paciente.prioridade}
 Status: ${paciente.status}
 Chegada: ${paciente.dataChegada.toLocaleString("pt-BR")}
-  `);
-});
+`);
+  });
+}
 
-if (pacienteAtualizado) {
+function exibirFila(): void {
+  const fila = listarFilaAtendimento();
+
+  console.log("\n====================================");
+  console.log(" Fila de atendimento");
+  console.log("====================================");
+
+  if (fila.length === 0) {
+    console.log("Não existem pacientes aguardando.");
+    return;
+  }
+
+  fila.forEach((paciente, indice) => {
+    console.log(
+      `${indice + 1}. ${paciente.nome} — ${paciente.prioridade}`,
+    );
+  });
+}
+
+function simularAtendimento(): void {
+  const proximoPaciente = chamarProximoPaciente();
+
+  if (!proximoPaciente) {
+    console.log("\nNão existem pacientes para chamar.");
+    return;
+  }
+
   console.log(
-    `${pacienteAtualizado.nome} foi atualizado para a prioridade ${pacienteAtualizado.prioridade}.`,
+    `\nChamando ${proximoPaciente.nome} para atendimento.`,
+  );
+
+  const pacienteFinalizado = finalizarAtendimento(
+    proximoPaciente.id,
+  );
+
+  if (pacienteFinalizado) {
+    console.log(
+      `Atendimento de ${pacienteFinalizado.nome} finalizado.`,
+    );
+  }
+}
+
+function exibirConsultas(): void {
+  console.log("\n====================================");
+  console.log(" Consultas");
+  console.log("====================================");
+
+  console.log(
+    `Pacientes cadastrados: ${gerarListaNomes()}`,
+  );
+
+  const pacienteEncontrado =
+    buscarPacientePorNome("Maria da Silva");
+
+  if (pacienteEncontrado) {
+    console.log(
+      `Paciente localizado: ${pacienteEncontrado.nome}`,
+    );
+  } else {
+    console.log("Paciente não encontrado.");
+  }
+
+  const pacientesAmarelos =
+    listarPacientesPorPrioridade("amarelo");
+
+  console.log(
+    `Pacientes amarelos: ${pacientesAmarelos.length}`,
+  );
+
+  console.log(
+    existePacienteEmergencial()
+      ? "Existem pacientes em emergência."
+      : "Não existem pacientes em emergência.",
   );
 }
 
-console.log(`Segundo paciente cadastrado: ${joao.nome}`);
+function exibirEstatisticas(): void {
+  const estatisticas = gerarEstatisticas();
 
+  console.log("\n====================================");
+  console.log(" Estatísticas");
+  console.log("====================================");
 
-console.log("\nConsultas:");
-
-console.log(`Pacientes cadastrados: ${gerarListaNomes()}`);
-
-const pacienteEncontrado =
-  buscarPacientePorNome("Maria da Silva");
-
-if (pacienteEncontrado) {
   console.log(
-    `Paciente localizado: ${pacienteEncontrado.nome}`,
+    `Total de pacientes: ${estatisticas.totalPacientes}`,
   );
-} else {
-  console.log("Paciente não encontrado.");
+
+  console.log(
+    `Aguardando: ${estatisticas.totalAguardando}`,
+  );
+
+  console.log(
+    `Em atendimento: ${estatisticas.totalEmAtendimento}`,
+  );
+
+  console.log(
+    `Atendidos: ${estatisticas.totalAtendidos}`,
+  );
+
+  console.log(
+    `Cancelados: ${estatisticas.totalCancelados}`,
+  );
+
+  console.log(
+    `Idade média: ${estatisticas.idadeMedia.toFixed(1)} anos`,
+  );
+
+  console.log("\nPacientes por prioridade:");
+
+  Object.entries(
+    estatisticas.pacientesPorPrioridade,
+  ).forEach(([prioridade, quantidade]) => {
+    console.log(`${prioridade}: ${quantidade}`);
+  });
+
+  console.log("\nPacientes por status:");
+
+  Object.entries(
+    estatisticas.pacientesPorStatus,
+  ).forEach(([status, quantidade]) => {
+    console.log(`${status}: ${quantidade}`);
+  });
 }
 
-const pacientesAmarelos =
-  listarPacientesPorPrioridade("amarelo");
+function tratarErro(erro: unknown): void {
+  if (erro instanceof ErroValidacaoPaciente) {
+    console.error(
+      "\nNão foi possível processar os pacientes:",
+    );
 
-console.log(
-  `Pacientes amarelos: ${pacientesAmarelos.length}`,
-);
+    erro.erros.forEach(({ codigo, mensagem }) => {
+      console.error(`[${codigo}] ${mensagem}`);
+    });
 
-const possuiEmergencia = existePacienteEmergencial();
+    return;
+  }
 
-console.log(
-  possuiEmergencia
-    ? "Existem pacientes em emergência."
-    : "Não existem pacientes em emergência.",
-);
+  if (erro instanceof ErroAplicacao) {
+    console.error(
+      `\n[${erro.codigo}] ${erro.message}`,
+    );
 
-const estatisticas = gerarEstatisticas();
+    if (erro.tipo === "sistema") {
+      console.error(
+        "Entre em contato com o TI e informe o código acima.",
+      );
+    }
 
-console.log("\nEstatísticas:");
+    return;
+  }
 
-console.log(
-  `Total de pacientes: ${estatisticas.totalPacientes}`,
-);
+  console.error(
+    "\n[SYS-001] Ocorreu um erro interno inesperado.",
+  );
 
-console.log(
-  `Aguardando: ${estatisticas.totalAguardando}`,
-);
+  console.error(
+    "Entre em contato com o TI e informe o código SYS-001.",
+  );
 
-console.log(
-  `Em atendimento: ${estatisticas.totalEmAtendimento}`,
-);
+  console.error("Detalhes técnicos:", erro);
+}
 
-console.log(
-  `Atendidos: ${estatisticas.totalAtendidos}`,
-);
+async function iniciarSistema(): Promise<void> {
+  try {
+    exibirCabecalho();
 
-console.log(
-  `Cancelados: ${estatisticas.totalCancelados}`,
-);
+    cadastrarPacientesExemplo();
 
-console.log(
-  `Idade média: ${calcularIdadeMedia().toFixed(1)} anos`,
-);
+    await carregarDadosExternos();
 
-console.log("\nPacientes por prioridade:");
+    exibirPacientes();
+    exibirFila();
+    exibirConsultas();
+    exibirEstatisticas();
 
-Object.entries(
-  estatisticas.pacientesPorPrioridade,
-).forEach(([prioridade, quantidade]) => {
-  console.log(`${prioridade}: ${quantidade}`);
-});
+    simularAtendimento();
+
+    console.log("\nFila após o atendimento:");
+    exibirFila();
+
+    console.log("\nEstatísticas após o atendimento:");
+    exibirEstatisticas();
+  } catch (erro: unknown) {
+    tratarErro(erro);
+  }
+}
+
+iniciarSistema();

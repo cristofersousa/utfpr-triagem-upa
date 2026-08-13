@@ -1,0 +1,21 @@
+[
+  {
+    "nome": "Carlos Pereira",
+    "idade": 35,
+    "cpf": "111.222.333-44",
+    "telefone": "(47) 99999-1111",
+    "sintomas": ["febre", "dor de cabeça"]
+  },
+  {
+    "nome": "Ana Oliveira",
+    "idade": 82,
+    "cpf": "555.666.777-88",
+    "sintomas": ["dor no peito"]
+  },
+  {
+    "nome": "Pedro Santos",
+    "idade": 27,
+    "cpf": "999.888.777-66",
+    "sintomas": ["náusea"]
+  }
+]
