@@ -11,6 +11,12 @@ import {
   ErroValidacaoPaciente,
 } from "@/errors/erro-aplicacao";
 
+import {
+  chamarProximoPaciente,
+  finalizarAtendimento,
+  listarFilaAtendimento,
+} from "@/services/fila-service";
+
 const sistemaAtivo: boolean = true;
 const unidade: string = "UPA Central";
 const quantidadePacientes: number = 0;
@@ -52,6 +58,14 @@ const pacienteAtualizado = atualizarPaciente(maria.id, {
 });
 
 console.log("\nPacientes cadastrados:");
+
+console.log("\nFila de atendimento:");
+
+listarFilaAtendimento().forEach((paciente, indice) => {
+  console.log(
+    `${indice + 1}. ${paciente.nome} — ${paciente.prioridade}`,
+  );
+});
 
 listarPacientes().forEach((paciente) => {
   console.log(`
