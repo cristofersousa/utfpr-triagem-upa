@@ -17,6 +17,19 @@ import {
   listarFilaAtendimento,
 } from "@/services/fila-service";
 
+import {
+  buscarPacientePorNome,
+  existePacienteEmergencial,
+  gerarListaNomes,
+  listarPacientesPorPrioridade,
+} from "@/services/consulta-service";
+
+import {
+  calcularIdadeMedia,
+  gerarEstatisticas,
+} from "@/services/estatistica-service";
+
+
 const sistemaAtivo: boolean = true;
 const unidade: string = "UPA Central";
 const quantidadePacientes: number = 0;
@@ -87,3 +100,69 @@ if (pacienteAtualizado) {
 
 console.log(`Segundo paciente cadastrado: ${joao.nome}`);
 
+
+console.log("\nConsultas:");
+
+console.log(`Pacientes cadastrados: ${gerarListaNomes()}`);
+
+const pacienteEncontrado =
+  buscarPacientePorNome("Maria da Silva");
+
+if (pacienteEncontrado) {
+  console.log(
+    `Paciente localizado: ${pacienteEncontrado.nome}`,
+  );
+} else {
+  console.log("Paciente não encontrado.");
+}
+
+const pacientesAmarelos =
+  listarPacientesPorPrioridade("amarelo");
+
+console.log(
+  `Pacientes amarelos: ${pacientesAmarelos.length}`,
+);
+
+const possuiEmergencia = existePacienteEmergencial();
+
+console.log(
+  possuiEmergencia
+    ? "Existem pacientes em emergência."
+    : "Não existem pacientes em emergência.",
+);
+
+const estatisticas = gerarEstatisticas();
+
+console.log("\nEstatísticas:");
+
+console.log(
+  `Total de pacientes: ${estatisticas.totalPacientes}`,
+);
+
+console.log(
+  `Aguardando: ${estatisticas.totalAguardando}`,
+);
+
+console.log(
+  `Em atendimento: ${estatisticas.totalEmAtendimento}`,
+);
+
+console.log(
+  `Atendidos: ${estatisticas.totalAtendidos}`,
+);
+
+console.log(
+  `Cancelados: ${estatisticas.totalCancelados}`,
+);
+
+console.log(
+  `Idade média: ${calcularIdadeMedia().toFixed(1)} anos`,
+);
+
+console.log("\nPacientes por prioridade:");
+
+Object.entries(
+  estatisticas.pacientesPorPrioridade,
+).forEach(([prioridade, quantidade]) => {
+  console.log(`${prioridade}: ${quantidade}`);
+});

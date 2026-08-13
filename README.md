@@ -39,8 +39,13 @@ src/
 │   └── erro-aplicacao.ts
 ├── models/
 │   └── paciente.ts
+│   └── estatistica.ts
 ├── services/
 │   └── paciente-service.ts
+│   └── fila-service.ts
+│   └── triagem-service.ts
+│   └── estatistica-service.ts
+│   └── consulta-service.ts
 ├── validators/
 │   └── paciente-validator.ts
 └── index.ts
@@ -55,7 +60,7 @@ Para conhecer a modelagem e as funcionalidades relacionadas aos sistema, consult
 - [Guia de Erros da Aplicação](docs/erros-sistema.md)
 - [Guia do Serviço de Triagem](docs/triagem.md)
 - [Guia de Fila de Atendimento](docs/fila-atendimento.md)
-
+- [Guia de Consultas e Estatísticas](docs/consultas-estatisticas.md)
 
 ## Como executar
 
