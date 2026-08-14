@@ -25,22 +25,7 @@ O sistema será executado pelo terminal utilizando Node.js e desenvolvido de for
 - Validação de dados;
 - Testes automatizados.
 
-## Requisitos implementados
-
-| Requisito | Implementação                                                |
-| --------- | ------------------------------------------------------------ | -------------------------------------------- |
-| R01       | Cadastro, consulta e atualização de pacientes                |
-| R02       | Organização em funções e módulos independentes               |
-| R03       | Classificação de risco e gerenciamento da fila               |
-| R04       | Consultas e estatísticas com métodos de arrays               |
-| R05       | Modelagem tipada das entidades                               |
-| R06       | Carregamento assíncrono de dados em formato JSON             |
-| R07       | Pendente                                                     | Testes automatizados com Node.js Test Runner |
-| RA01      | Validação de CPF e telefone com Regex                        |
-| RA02      | Uso de `Omit`, `Pick`, `Partial`, `ReadonlyArray` e `Record` |
-| RA03      | Pendente                                                     | Pattern Matching com `ts-pattern`            |
-
-## Requisitos contemplados
+## Requisitos | Status  | Implementação
 
 A tabela abaixo relaciona cada requisito da atividade à implementação realizada no projeto.
 
@@ -517,6 +502,25 @@ Status: atendido
 - [ ] Implementar testes automatizados com `node:test` — R07;
 - [ ] Aplicar Pattern Matching com `ts-pattern` — RA03.
 
-## Autor
 
-Cristofer Sousa
+Caso exista, dúvidas!
+Abra uma Issue neste repositório.
+
+`Última atualização: 13 de agosto de 2026`
+
+
+### Autor
+
+<div align="center">
+<img src="https://github.com/cristofersousa.png" width="150px" alt="Cristofer Sousa" style="border-radius: 50%;"/>
+
+Cristofer Sousa <br>
+<a href="https://www.linkedin.com/in/cristofersousa/">
+https://www.linkedin.com/in/cristofersousa/
+</a> <br>
+🎓 [UTFPR - Universidade Tecnológica Federal do Paraná](https://www.utfpr.edu.br/cursos/especializacao/gp/especializacao-em-desenvolvimento-web)
+
+Campus Guarapuava - PR | Engenharia de Software  
+
+
+
